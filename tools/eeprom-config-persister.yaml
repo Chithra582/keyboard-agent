@@ -1,0 +1,17 @@
+name: "eeprom-config-persister"
+description: "Writes and verifies serialized binary keymap configurations into keyboard EEPROM flash memory."
+input_schema:
+  type: "object"
+  properties:
+    device_id:
+      type: "string"
+      description: "Target UHK device identifier."
+    config_tree:
+      type: "object"
+      description: "Serialized configuration data conforming to userConfigVersion schema."
+    verify_checksum:
+      type: "boolean"
+      description: "Perform post-write readback verification."
+  required:
+    - "device_id"
+    - "config_tree"

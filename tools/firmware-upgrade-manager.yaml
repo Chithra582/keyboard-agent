@@ -1,0 +1,21 @@
+name: "firmware-upgrade-manager"
+description: "Manages bootloader handshakes, payload checksum verification, and recovery flashing routines."
+input_schema:
+  type: "object"
+  properties:
+    device_id:
+      type: "string"
+      description: "Target UHK device identifier."
+    firmware_binary_path:
+      type: "string"
+      description: "Local path to verified firmware binary or Intel HEX file."
+    expected_checksum:
+      type: "string"
+      description: "SHA-256 hash string for binary validation."
+    protocol:
+      type: "string"
+      description: "Bootloader flashing protocol (kboot, mcumgr)."
+  required:
+    - "device_id"
+    - "firmware_binary_path"
+    - "expected_checksum"

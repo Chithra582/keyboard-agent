@@ -1,0 +1,13 @@
+name: "macro-syntax-validator"
+description: "Validates and parses user macro syntax, timing parameters, and action sequences."
+input_schema:
+  type: "object"
+  properties:
+    script_content:
+      type: "string"
+      description: "Raw smart macro DSL script content to validate."
+    target_hardware:
+      type: "string"
+      description: "Target keyboard generation (uhk60v1, uhk60v2)."
+  required:
+    - "script_content"

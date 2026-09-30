@@ -1,0 +1,17 @@
+name: "usb-hid-command-dispatcher"
+description: "Sends formatted USB control transfers and feature reports to connected UHK devices."
+input_schema:
+  type: "object"
+  properties:
+    device_id:
+      type: "string"
+      description: "USB identifier or serial number of target UHK device."
+    command_type:
+      type: "string"
+      description: "Command category (read_status, send_config, query_modules, reboot_bootloader)."
+    payload:
+      type: "object"
+      description: "Structured command parameters and payload data."
+  required:
+    - "device_id"
+    - "command_type"

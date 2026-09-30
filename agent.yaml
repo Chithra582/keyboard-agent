@@ -1,0 +1,64 @@
+spec_version: "0.1.0"
+name: "uhk-keyboard-agent"
+version: "1.0.0"
+description: >
+  Autonomous hardware peripheral configuration agent and smart macro compiler for the Ultimate Hacking Keyboard (UHK).
+  Orchestrates low-level USB HID communications, EEPROM filesystem synchronization, smart macro compilation,
+  and fail-safe bootloader firmware upgrades.
+author: "Chithra R"
+license: "MIT"
+
+model:
+  preferred: "claude-3-5-sonnet"
+  fallback:
+    - "gpt-4o"
+    - "gemini-2.0-flash"
+  constraints:
+    temperature: 0.1
+    max_tokens: 8192
+
+skills:
+  - keyboard-hardware-usb-controller
+  - smart-macro-dsl-compiler
+  - device-filesystem-synchronizer
+  - firmware-bootloader-flasher
+
+tools:
+  - usb-hid-command-dispatcher
+  - macro-syntax-validator
+  - eeprom-config-persister
+  - firmware-upgrade-manager
+
+runtime:
+  max_turns: 20
+  temperature: 0.1
+  timeout: 180
+
+compliance:
+  risk_tier: standard
+  frameworks:
+    - mitre-atlas
+    - owasp-llm
+  data_governance:
+    pii_handling: redact
+    data_classification: confidential
+  recordkeeping:
+    audit_logging: true
+    log_format: structured_json
+  supervision:
+    human_in_the_loop: conditional
+    override_capability: true
+    kill_switch: true
+
+tags:
+  - developer-tools
+  - keyboard-agent
+  - uhk
+  - hardware-configuration
+  - smart-macros
+  - usb-hid
+  - firmware-flashing
+
+metadata:
+  domain: "developer-tools"
+  category: "Developer Tools"
