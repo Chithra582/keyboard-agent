@@ -1,22 +1,30 @@
-# Agent Explainability & Transparency Report
+# EXPLAINABILITY — Ultimate Hacking Keyboard Agent
 
-- **Agent Name:** uhk-keyboard-agent
-- **OpenGAP Specification:** 0.1.0
-- **Agent ID:** uhk-keyboard-agent
-- **Domain:** Developer Tools / Hardware Peripheral Configuration & Smart Macro Runtime
-- **Passport Validation Tier:** Tier-1 Certified Autonomous Agent
+> **Admissibility & Transparency Report for OpenGAP / Agent Passport**  
+> *Agent Name:* Ultimate Hacking Keyboard Agent (`uhk-keyboard-agent`)  
+> *Specification:* OpenGAP v0.1.0  
+> *Domain:* Developer Tools / Hardware Peripheral Configuration & Smart Macro Runtime  
 
 ---
 
-## 1. Overview & Architectural Purpose
+## 1. Overview & Operational Purpose
 
 The **Ultimate Hacking Keyboard Agent** (`uhk-keyboard-agent`) is a dedicated hardware-interfacing autonomous agent designed to configure, program, and maintain Ultimate Hacking Keyboard hardware peripherals and modular attachments. Leveraging a robust multi-package architecture—spanning `uhk-agent`, `uhk-usb`, `uhk-fs`, `uhk-smart-macro`, `kboot`, and `mcumgr`—the agent automates hardware communication over USB HID, validates and compiles smart macro domain-specific language (DSL) routines, synchronizes internal EEPROM flash layouts, and executes fail-safe firmware updates.
 
-Designed to eliminate hardware misconfiguration risks, the agent validates every operation deterministically before committing changes to physical flash memory.
+The agent's primary operational purpose is to eliminate hardware misconfiguration risks, validate user configurations deterministically before committing changes to physical flash memory, and provide a secure, auditable peripheral configuration runtime for developers.
 
 ---
 
 ## 2. How the Agent Decides (Decision-Making Logic)
+
+Ultimate Hacking Keyboard Agent operates across a deterministic, multi-stage hardware decision pipeline that enforces device safety and wear leveling at every step:
+
+```
+[User Keymap / Macro Input] ──> [AST Validation & Pre-flight Sentry] ──> [EEPROM Differential Hash Check]
+                                                                                        │
+                                                                                        ▼
+[Structured Audit Log & Readback] <── [USB HID / Bootloader Dispatch] <── [Atomic Flash Sector Commit]
+```
 
 ### 2.1 Hardware Discovery & USB Protocol Handshake
 - **Decision:** Determines device identity, attached hardware modules (trackball, trackpoint, touchpad, key cluster), and protocol versions.
@@ -51,15 +59,23 @@ Designed to eliminate hardware misconfiguration risks, the agent validates every
 ## 3. Data Sources & Inputs Used
 
 | Data Input | Source | Purpose | Data Handling & Privacy |
-| :--- | :--- | :--- | :--- |
-| USB HID Device Descriptors | Connected physical UHK hardware | Identifies keyboard model, firmware, and modules | Ephemeral runtime query, strictly local |
-| Keymap Configurations & Profiles | Local user configuration files (`uhk-web`) | Defines key mappings, layer layouts, and shortcuts | Stored locally on disk and device flash |
-| Smart Macro Script Files | User-authored macro DSL scripts | Automates complex keystroke sequences | Validated in memory without external transmission |
-| Firmware Release Binaries | Official UHK GitHub repository / local assets | Updates embedded microcontroller firmware | Checksum verified, cached locally |
+|---|---|---|---|
+| **USB HID Device Descriptors** | Connected physical UHK hardware | Identifies keyboard model, firmware, and modules | Ephemeral runtime query, strictly local |
+| **Keymap Configurations & Profiles** | Local user configuration files (`uhk-web`) | Defines key mappings, layer layouts, and shortcuts | Stored locally on disk and device flash |
+| **Smart Macro Script Files** | User-authored macro DSL scripts | Automates complex keystroke sequences | Validated in memory without external transmission |
+| **Firmware Release Binaries** | Official UHK GitHub repository / local assets | Updates embedded microcontroller firmware | Checksum verified, cached locally |
+
+Ultimate Hacking Keyboard Agent complies with operational security and privacy standards:
+- **Zero Keystroke Logging:** Strictly prohibits capturing, logging, or exfiltrating real-time user keystroke telemetry outside of explicit macro debugging sessions.
+- **Local Storage Primacy:** Device configurations and EEPROM binary trees remain strictly on the user's local machine and physical keyboard without external telemetry leaks.
+- **Host Consent Required:** Writing to EEPROM or triggering bootloader mode always requires explicit user confirmation.
+- **Protected Recovery Path:** Bootloader recovery mode (`kboot`/`mcumgr`) remains resident in protected ROM to ensure zero hardware bricking.
 
 ---
 
 ## 4. Known Limitations & Failure Modes
+
+Reviewers, auditors, and users should note the following operational constraints:
 
 1. **USB Bus Disconnection During Flashing:**
    - *Limitation:* Physical cable disconnect during bootloader flash writing can interrupt image transmission.
@@ -81,7 +97,7 @@ Designed to eliminate hardware misconfiguration risks, the agent validates every
 
 ## 5. Verification, Safety & Human Oversight
 
-- **Zero Unprompted Flash Operations:** Writing to EEPROM or triggering bootloader mode always requires explicit user confirmation.
-- **Differential Diff Preview:** Visualizes changes between active hardware layout and proposed modifications prior to write execution.
-- **Non-Destructive Read-Only Querying:** Diagnostic commands and state queries are strictly read-only and cannot alter keyboard functionality.
-- **Hardware Fallback Keystrokes:** Firmware supports hardcoded hardware recovery key combinations to re-enter bootloader independently of host software.
+- **Real-Time Human Approval Gate:** Writing to EEPROM or triggering bootloader mode always requires explicit user confirmation.
+- **Emergency Session Interrupt:** Unplugging the USB cable or aborting the CLI immediately suspends all writes without corrupting active EEPROM sectors.
+- **Step Quota Guardrails:** All flash write transactions are bounded by hardware sector size limits ($N \le 64\text{ KB}$) to prevent buffer exhaustion.
+- **Structured Audit Logging:** Every dispatched USB command, compiled macro bytecode hash, and firmware upgrade step is journaled in local audit files.
